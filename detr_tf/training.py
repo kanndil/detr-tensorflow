@@ -48,8 +48,8 @@ def fit(model, train_dt, optimizers, config, epoch_nb, class_names):
         index_one=0
         while(index_one<75):
 
-            new_class=np.delete(new_class, 25, 1)
-            new_box=np.delete(new_box, 25, 1)
+            new_class=np.delete(new_class, 20, 1)
+            new_box=np.delete(new_box, 20, 1)
             index_one+=1
    
         t_class = tf.convert_to_tensor(new_class)
