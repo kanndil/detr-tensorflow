@@ -17,7 +17,7 @@ from .weights import load_weights
 
 
 class DETR(tf.keras.Model):
-    def __init__(self, num_classes=92, num_queries=25,
+    def __init__(self, num_classes=92, num_queries=20,
                  backbone=None,
                  pos_encoder=None,
                  transformer=None,
