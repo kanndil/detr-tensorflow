@@ -45,21 +45,16 @@ def fit(model, train_dt, optimizers, config, epoch_nb, class_names):
        
         new_class= t_class.numpy()
         new_box= t_bbox.numpy()
-        first_iterator=0
-        sec_iterator=0
-        while((first_iterator+sec_iterator)<100):
-          
-          if (new_class[0][first_iterator]== 0):
-            sec_iterator+=1  
-            new_class=np.delete(new_class, first_iterator, 1)
-            new_box=np.delete(new_box, first_iterator, 1)
-          else:
-            first_iterator+=1
+        index_one=0
+        while(index_one<75):
 
+            new_class=np.delete(new_class, 25, 1)
+            new_box=np.delete(new_box, 25, 1)
+            index_one+=1
+   
         t_class = tf.convert_to_tensor(new_class)
         t_bbox = tf.convert_to_tensor(new_box)
 
-        print(f"here")
 
         # Run the prediction and retrieve the gradient step for each part of the network
         m_outputs, total_loss, log, gradient_steps = run_train_step(model, images, t_bbox, t_class, optimizers, config)
