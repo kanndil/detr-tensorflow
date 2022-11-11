@@ -6,7 +6,7 @@ from .loss.loss import get_losses
 import time
 import wandb
 
-@tf.function
+@tf.function(reduce_retracing=True)
 def run_train_step(model, images, t_bbox, t_class, optimizers, config):
 
     if config.target_batch is not None:
@@ -25,7 +25,7 @@ def run_train_step(model, images, t_bbox, t_class, optimizers, config):
     return m_outputs, total_loss, log, gradient_steps
 
 
-@tf.function
+@tf.function(reduce_retracing=True)
 def run_val_step(model, images, t_bbox, t_class, config):
     m_outputs = model(images, training=False)
     total_loss, log = get_losses(m_outputs, t_bbox, t_class, config)
@@ -35,12 +35,31 @@ def run_val_step(model, images, t_bbox, t_class, config):
 def fit(model, train_dt, optimizers, config, epoch_nb, class_names):
     """ Train the model for one epoch
     """
+    import numpy as np
     # Aggregate the gradient for bigger batch and better convergence
     gradient_aggregate = None
     if config.target_batch is not None:
         gradient_aggregate = int(config.target_batch // config.batch_size)
     t = None
     for epoch_step , (images, t_bbox, t_class) in enumerate(train_dt):
+       
+        new_class= t_class.numpy()
+        new_box= t_bbox.numpy()
+        first_iterator=0
+        sec_iterator=0
+        while((first_iterator+sec_iterator)<100):
+          
+          if (new_class[0][first_iterator]== 0):
+            sec_iterator+=1  
+            new_class=np.delete(new_class, first_iterator, 1)
+            new_box=np.delete(new_box, first_iterator, 1)
+          else:
+            first_iterator+=1
+
+        t_class = tf.convert_to_tensor(new_class)
+        t_bbox = tf.convert_to_tensor(new_box)
+
+        print(f"here")
 
         # Run the prediction and retrieve the gradient step for each part of the network
         m_outputs, total_loss, log, gradient_steps = run_train_step(model, images, t_bbox, t_class, optimizers, config)
