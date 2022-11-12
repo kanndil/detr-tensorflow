@@ -110,8 +110,8 @@ def get_detr_losses(m_outputs, target_bbox, target_label, config, suffix=""):
    
 #     predicted_label = tf.convert_to_tensor(new_class)
 #     predicted_bbox = tf.convert_to_tensor(new_box)
-    predicted_label=  tf.slice(predicted_label,begin=[0],size=[25]))
-    predicted_bbox=  tf.slice(predicted_bbox,begin=[0],size=[25]))
+    predicted_label=  tf.slice(predicted_label,begin=[0],size=[25])
+    predicted_bbox=  tf.slice(predicted_bbox,begin=[0],size=[25])
 
 
     all_target_bbox = []
