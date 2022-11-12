@@ -96,9 +96,22 @@ def loss_boxes(p_bbox, p_class, t_bbox, t_class, t_indices, p_indices, t_selecto
     return loss_giou, l1_loss
 
 def get_detr_losses(m_outputs, target_bbox, target_label, config, suffix=""):
-
+    import numpy as np
     predicted_bbox = m_outputs["pred_boxes"]
     predicted_label = m_outputs["pred_logits"]
+
+    new_class= predicted_label.numpy()
+    new_box= predicted_bbox.numpy()
+    index_one=0
+    while(index_one<75):
+      new_class=np.delete(new_class, 20, 1)
+      new_box=np.delete(new_box, 20, 1)
+      index_one+=1
+   
+    predicted_label = tf.convert_to_tensor(new_class)
+    predicted_bbox = tf.convert_to_tensor(new_box)
+
+
 
     all_target_bbox = []
     all_target_class = []
