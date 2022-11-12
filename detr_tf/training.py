@@ -35,7 +35,7 @@ def run_val_step(model, images, t_bbox, t_class, config):
 def fit(model, train_dt, optimizers, config, epoch_nb, class_names):
     """ Train the model for one epoch
     """
-    import numpy as np
+#     import numpy as np
     # Aggregate the gradient for bigger batch and better convergence
     gradient_aggregate = None
     if config.target_batch is not None:
@@ -43,17 +43,17 @@ def fit(model, train_dt, optimizers, config, epoch_nb, class_names):
     t = None
     for epoch_step , (images, t_bbox, t_class) in enumerate(train_dt):
        
-        new_class= t_class.numpy()
-        new_box= t_bbox.numpy()
-        index_one=0
-        while(index_one<75):
+#         new_class= t_class.numpy()
+#         new_box= t_bbox.numpy()
+#         index_one=0
+#         while(index_one<75):
 
-            new_class=np.delete(new_class, 20, 1)
-            new_box=np.delete(new_box, 20, 1)
-            index_one+=1
+#             new_class=np.delete(new_class, 20, 1)
+#             new_box=np.delete(new_box, 20, 1)
+#             index_one+=1
    
-        t_class = tf.convert_to_tensor(new_class)
-        t_bbox = tf.convert_to_tensor(new_box)
+#         t_class = tf.convert_to_tensor(new_class)
+#         t_bbox = tf.convert_to_tensor(new_box)
 
 
         # Run the prediction and retrieve the gradient step for each part of the network
