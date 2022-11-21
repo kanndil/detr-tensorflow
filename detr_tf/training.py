@@ -16,7 +16,7 @@ def run_train_step(model, images, t_bbox, t_class, optimizers, config):
 
     with tf.GradientTape() as tape:
         m_outputs = model(images, training=True)
-        print(m_outputs)
+        #print(m_outputs)
         total_loss, log = get_losses(m_outputs, t_bbox, t_class, config)
         total_loss = total_loss / gradient_aggregate
 
