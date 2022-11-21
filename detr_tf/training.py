@@ -16,6 +16,7 @@ def run_train_step(model, images, t_bbox, t_class, optimizers, config):
 
     with tf.GradientTape() as tape:
         m_outputs = model(images, training=True)
+        tf.print(m_outputs.shape)
         total_loss, log = get_losses(m_outputs, t_bbox, t_class, config)
         total_loss = total_loss / gradient_aggregate
 
@@ -42,22 +43,11 @@ def fit(model, train_dt, optimizers, config, epoch_nb, class_names):
         gradient_aggregate = int(config.target_batch // config.batch_size)
     t = None
     for epoch_step , (images, t_bbox, t_class) in enumerate(train_dt):
-       
-#         new_class= t_class.numpy()
-#         new_box= t_bbox.numpy()
-#         index_one=0
-#         while(index_one<75):
-
-#             new_class=np.delete(new_class, 20, 1)
-#             new_box=np.delete(new_box, 20, 1)
-#             index_one+=1
-   
-#         t_class = tf.convert_to_tensor(new_class)
-#         t_bbox = tf.convert_to_tensor(new_box)
 
 
         # Run the prediction and retrieve the gradient step for each part of the network
         m_outputs, total_loss, log, gradient_steps = run_train_step(model, images, t_bbox, t_class, optimizers, config)
+        #m_outputs=  tf.slice(m_outputs,begin=[0,0, 0],size=[-1,20, -1])
         
         # Load the predictions
         if config.log:
