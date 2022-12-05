@@ -87,5 +87,9 @@ def eval(model, valid_dt, config, class_name, evaluation_step=200):
             t = t if t is not None else time.time()
             elapsed = time.time() - t
             print(f"Validation step: [{val_step}], \t ce: [{log['label_cost']:.2f}] \t giou : [{log['giou_loss']:.2f}] \t l1 : [{log['l1_loss']:.2f}] \t time : [{elapsed:.2f}]")
+            
+            wandb.log({f"train/{k}":log[k] for k in log}, step=config.global_step)
+            t = time.time()
+        
         if val_step+1 >= evaluation_step:
             break
