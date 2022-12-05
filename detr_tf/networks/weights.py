@@ -33,5 +33,13 @@ def load_weights(model, weights: str):
         print("Load weights from", os.path.join(wdir, f"{weights}.ckpt"))
         l = model.load_weights(os.path.join(wdir, f"{weights}.ckpt"))
         l.expect_partial()
+    elif weights in "localweights":
+        weights="detr"
+        wdir = f"weights/{weights}"
+        if not os.path.exists(wdir):
+            os.makedirs(wdir)
+        print("Load weights locally from", os.path.join(wdir, f"{weights}.ckpt"))
+        l = model.load_weights(os.path.join(wdir, f"{weights}.ckpt"))
+        l.expect_partial()
     else:
         raise Exception(f'Cant load the weights: {weights}')
