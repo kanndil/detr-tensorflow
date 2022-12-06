@@ -86,8 +86,9 @@ def setup_optimizers(model, config):
     backbone_optimizer = tf.keras.optimizers.Adam(learning_rate=get_backbone_learning_rate, clipnorm=config.gradient_norm_clipping)
     transformers_optimizer = tf.keras.optimizers.Adam(learning_rate=get_transformers_learning_rate, clipnorm=config.gradient_norm_clipping)
     nlayers_optimizer = tf.keras.optimizers.Adam(learning_rate=get_nlayers_learning_rate, clipnorm=config.gradient_norm_clipping)
-
+    # nlayers_optimizer = tf.keras.optimizers.SGD(learning_rate=get_nlayers_learning_rate, momentum=0.1)
     # Set trainable variables
+
 
     backbone_variables, transformers_variables, nlayers_variables = [], [], []
 
