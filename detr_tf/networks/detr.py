@@ -78,24 +78,41 @@ class DETR(tf.keras.Model):
         box_ftmps = self.activation(self.bbox_embed_linear2(box_ftmps))
         outputs_coord = tf.sigmoid(self.bbox_embed_linear3(box_ftmps))
 
-        from detr_tf.inference import get_model_inference, numpy_bbox_to_image
+        # from detr_tf.inference import get_model_inference, numpy_bbox_to_image
         
-        output_before_nms = {'pred_logits': outputs_class[-1],
-                  'pred_boxes': outputs_coord[-1]}
+        # output_before_nms = {'pred_logits': outputs_class[-1],
+        #           'pred_boxes': outputs_coord[-1]}
         
-        predicted_bbox, predicted_labels, predicted_scores = get_model_inference(output_before_nms, 0, bbox_format="xy_center")
+        # predicted_bbox, predicted_labels, predicted_scores = get_model_inference(output_before_nms, 0, bbox_format="xy_center")
             
-        selected_indices = tf.image.non_max_suppression(
-        predicted_bbox, predicted_scores, 100, 0.5)
-        selected_boxes = tf.gather(predicted_bbox, selected_indices)
-        selected_labels = tf.gather(predicted_labels, selected_indices)
-        selected_scores = tf.gather(predicted_scores, selected_indices)
+        # selected_indices = tf.image.non_max_suppression(
+        # predicted_bbox, predicted_scores, 100, 0.5)
+        # selected_boxes = tf.gather(predicted_bbox, selected_indices)
+        # selected_labels = tf.gather(predicted_labels, selected_indices)
+        # selected_scores = tf.gather(predicted_scores, selected_indices)
 
-        output = {'pred_logits': selected_boxes,
-                  'pred_boxes': selected_labels,
-                  'selected_scores': selected_scores}
+        # output = {'pred_logits': selected_boxes,
+        #           'pred_boxes': selected_labels,
+        #           'selected_scores': selected_scores
+        #           }
 
-        
+
+
+
+        predicted_label=  tf.slice(outputs_class[-1],begin=[0,0, 0],size=[-1,30, -1])
+        predicted_bbox=  tf.slice(outputs_coord[-1],begin=[0, 0, 0],size=[-1, 30, -1])
+
+        # output = {'pred_logits': outputs_class[-1],
+        #           'pred_boxes': outputs_coord[-1]}
+
+
+
+
+        output = {'pred_logits': predicted_label,
+                  'pred_boxes':predicted_bbox}
+
+        # print(outputs_coord[-1])
+
         if post_process:
             output = self.post_process(output)
         return output
