@@ -78,7 +78,8 @@ def eval(model, valid_dt, config, class_name, evaluation_step=200):
         m_outputs, total_loss, log = run_val_step(model, images, t_bbox, t_class, config)
         # Log the predictions
         if config.log:
-            valid_log(images, t_bbox, t_class, m_outputs, config, val_step, config.global_step,  class_name, evaluation_step=evaluation_step, prefix="train/")
+            print("heres")
+            valid_log(images, t_bbox, t_class, m_outputs, config, val_step, config.global_step,  class_name, evaluation_step=evaluation_step, prefix="val/")
         # Log the metrics
         if config.log and val_step == 0:
             wandb.log({f"val/{k}":log[k] for k in log}, step=config.global_step)
@@ -88,7 +89,7 @@ def eval(model, valid_dt, config, class_name, evaluation_step=200):
             elapsed = time.time() - t
             print(f"Validation step: [{val_step}], \t ce: [{log['label_cost']:.2f}] \t giou : [{log['giou_loss']:.2f}] \t l1 : [{log['l1_loss']:.2f}] \t time : [{elapsed:.2f}]")
             
-            wandb.log({f"train/{k}":log[k] for k in log}, step=config.global_step)
+            wandb.log({f"val/{k}":log[k] for k in log}, step=config.global_step)
             t = time.time()
         
         if val_step+1 >= evaluation_step:
